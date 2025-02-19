@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { CartPage } from './CartPage';
+import { HomePage } from './HomePage';
+import ProductDetailsPage from './ProductDetailsPage';  // Import the new page
 
-function App() {
+const App = () => {
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0); // Count total items
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div style={{ padding: 30 }}>
+        <h1>Shopping Cart</h1>
+
+        <nav style={{ display: 'flex', justifyContent: 'flex-end', gap: '20px', padding: '10px', backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
+          <Link to="/" style={{ textDecoration: 'none', fontSize: '18px' }}>Home</Link>
+          <Link to="/cart" style={{ textDecoration: 'none', fontSize: '18px' }}>
+            Cart ({cartCount}) 
+          </Link>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />  {/* New route for product details */}
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
+
